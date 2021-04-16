@@ -9,21 +9,18 @@ import java.net.Socket;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
-import CP1.CertificateReader;
-import CP1.RSA;
-import CP1.PrivateKeyReader;
 
 public class ServerWithCP1 {
 
 	public static void main(String[] args) throws Exception {
 
 		// get server cert
-		X509Certificate serverCert = CertificateReader
-				.get("./key_certificate/cacsertificate.crt");
+		//X509Certificate serverCert = CertificateReader.get("PA2/CP1/key_cert/cacse.crt");
+		X509Certificate serverCert = CertificateReader.get("CP1/key_cert/cacse.crt");
 
 		// read S private key
 		PrivateKey serverPrivateKey;
-		serverPrivateKey = PrivateKeyReader.get("./key_certificate/private_key.der");
+		serverPrivateKey = PrivateKeyReader.get("CP1/key_cert/private_key.der");
 		System.out.println("ServerPrivateKey : " + serverPrivateKey);
 		System.out.println();
 

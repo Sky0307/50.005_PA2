@@ -1,4 +1,5 @@
 package CP1;
+
 import java.io.*;
 import java.nio.*;
 import java.security.*;
@@ -10,7 +11,7 @@ import java.security.cert.X509Certificate;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class CertificateReader {
+public class CertificateReader {
 
     public static X509Certificate get(String filename) throws Exception {
         InputStream inputStream = new FileInputStream(filename);
