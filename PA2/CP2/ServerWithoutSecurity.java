@@ -1,3 +1,4 @@
+package CP2;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -57,7 +58,7 @@ public class ServerWithoutSecurity {
 					// count and print the packet in string
 					packetCount++;
 					System.out.println("packetCount:" + packetCount);
-					System.out.println(new String(fromFileBuffer));
+					//System.out.println(new String(fromFileBuffer));
 					// System.out.println(Base64.getEncoder().encodeToString(block));
 
 					if (numBytes > 0)
