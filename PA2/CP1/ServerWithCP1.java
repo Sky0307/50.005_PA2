@@ -15,7 +15,6 @@ public class ServerWithCP1 {
 	public static void main(String[] args) throws Exception {
 
 		// get server cert
-		//X509Certificate serverCert = CertificateReader.get("PA2/CP1/key_cert/cacse.crt");
 		X509Certificate serverCert = CertificateReader.get("CP1/key_cert/cacse.crt");
 
 		// read S private key
@@ -44,9 +43,11 @@ public class ServerWithCP1 {
 
 			int packetCount = 0;
 
+			//stateless, keep looping to get packet type and read packet
 			while (!connectionSocket.isClosed()) {
 
 				int packetType = fromClient.readInt();
+
 				// AP
 				// do authentication
 				String clientMessage;
@@ -60,7 +61,6 @@ public class ServerWithCP1 {
 				}
 				if (packetType == 70) {
 					toClient.writeUTF(Base64.getEncoder().encodeToString(serverCert.getEncoded()));
-					// break;
 				}
 				if (packetType == 71) {
 					System.out.println("client closed connection due to failed AP");

@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.Base64;
 import java.util.Date;
 import CP1.CertificateReader;
 import CP1.*;
@@ -66,6 +67,17 @@ public class ClientWithCP1{
                 serverCert.verify(CAPublicKey);
             } catch (Exception e) {
                 e.printStackTrace();
+                toServer.writeInt(71); // 71 => invalid cert, close connection
+                System.out.println("Closing connection...");
+                clientSocket.close();
+            }
+
+            // verify server owns the private key associated with the public key in the cert
+            // by decrypting encryptedMessage with server's public key
+
+            String decryptedMessage = Base64.getEncoder().encodeToString(RSA.decrypt(Base64.getDecoder().decode(encryptedMessage), serverPublicKey));
+
+            if (decryptedMessage.contentEquals(clientMessage)) {
                 toServer.writeInt(71); // 71 => invalid cert, close connection
                 System.out.println("Closing connection...");
                 clientSocket.close();
