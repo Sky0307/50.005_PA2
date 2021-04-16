@@ -9,13 +9,16 @@ public class ClientWithoutSecurity {
 	public static void main(String[] args) {
 
     	String filename = "100.txt";
-    	if (args.length > 0) filename = args[0];
+    	if (args.length > 0)
+    		filename = args[0];
 
     	String serverAddress = "localhost";
-    	if (args.length > 1) filename = args[1];
+    	if (args.length > 1)
+    		filename = args[1];
 
     	int port = 4321;
-    	if (args.length > 2) port = Integer.parseInt(args[2]);
+    	if (args.length > 2)
+    		port = Integer.parseInt(args[2]);
 
 		int numBytes = 0;
 
@@ -53,6 +56,7 @@ public class ClientWithoutSecurity {
 	        byte [] fromFileBuffer = new byte[117];
 
 	        // Send the file
+			int packetCount = 0;
 	        for (boolean fileEnded = false; !fileEnded;) {
 				numBytes = bufferedFileInputStream.read(fromFileBuffer);
 				fileEnded = numBytes < 117;
@@ -61,6 +65,13 @@ public class ClientWithoutSecurity {
 				toServer.writeInt(numBytes);
 				toServer.write(fromFileBuffer);
 				toServer.flush();
+
+				// count and print the packet in string
+				packetCount++;
+				System.out.println("packetCount:" + packetCount);
+				System.out.println(new String(fromFileBuffer));
+				// System.out.println(Base64.getEncoder().encodeToString(fromFileBuffer));
+
 			}
 
 	        bufferedFileInputStream.close();
