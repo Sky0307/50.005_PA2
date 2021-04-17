@@ -1,5 +1,3 @@
-package CP1.Client;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -41,7 +39,6 @@ public class ClientWithSecurityCP1{
 		toServer.writeInt(nonce.getBytes().length);
 		toServer.write(nonce.getBytes());
 
-
 		// waiting for SecStore response
 		while(msg_verify == null){
 			int packetType = fromServer.readInt();
@@ -58,6 +55,7 @@ public class ClientWithSecurityCP1{
 		// ask for CA cert to get server's public key
 		msg_init = "Give me your certificate signed by CA";
 		System.out.println("Sending msg_init :" + msg_init);
+		// 2 => establishing connection
 		toServer.writeInt(2);
 		toServer.writeInt(msg_init.getBytes().length);
 		toServer.write(msg_init.getBytes());
@@ -148,8 +146,8 @@ public class ClientWithSecurityCP1{
 			//Handshake Protocol
 			handshake(toServer, fromServer, CAcert);
 
-			//send number of arguments
-			toServer.writeInt(1234);
+			// 1111 => for sending number of arguments
+			toServer.writeInt(1111); 
 			toServer.writeInt(count); //count = number of files
 			// Connect to server
 			System.out.println("Sending file...");
@@ -170,7 +168,7 @@ public class ClientWithSecurityCP1{
 				System.out.println(encryptedBlock);
 				
 				//send filename to SecServer
-				toServer.writeInt(0);
+				toServer.writeInt(0); // 0 => sending filenames
 				toServer.writeInt(encryptedBlock.length);
 				toServer.write(encryptedBlock);
 				//toServer.flush();
@@ -185,7 +183,8 @@ public class ClientWithSecurityCP1{
 					numBytes = bufferedFileInputStream.read(fromFileBuffer);
 					encryptedBlock = rsaCipher.doFinal(fromFileBuffer);
 					fileEnded = numBytes < 117;
-					toServer.writeInt(1);
+					// 1 => transferring file content
+					toServer.writeInt(1); 
 					toServer.writeInt(numBytes);
 					toServer.write(encryptedBlock);
 					//toServer.flush();

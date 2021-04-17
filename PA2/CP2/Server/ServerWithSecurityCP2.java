@@ -34,9 +34,6 @@ public class ServerWithSecurityCP2 {
 		KeyFactory kf = KeyFactory.getInstance("RSA");
 		return kf.generatePublic(spec);
   	}
-
-
-
 	public static void main(String[] args) throws Exception {
 		Cipher aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding"); 
 		byte[] decryptedBlock = null;
