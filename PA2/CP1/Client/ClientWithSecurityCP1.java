@@ -128,7 +128,7 @@ public class ClientWithSecurityCP1{
 			System.out.println("Establishing connection to server...");
 
 			//Create X509Certificate object
-			InputStream fis = new FileInputStream("key_cert/cacse.crt");
+			InputStream fis = new FileInputStream("cacse.crt");
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			X509Certificate CAcert =(X509Certificate)cf.generateCertificate(fis);
 
@@ -167,8 +167,8 @@ public class ClientWithSecurityCP1{
 				encryptedBlock = rsaCipher.doFinal(filename.getBytes());
 				System.out.println(encryptedBlock);
 				
-				//send filename to SecServer
-				toServer.writeInt(0); // 0 => sending filenames
+				// 0 => sending filename to SecServer
+				toServer.writeInt(0);
 				toServer.writeInt(encryptedBlock.length);
 				toServer.write(encryptedBlock);
 				//toServer.flush();
