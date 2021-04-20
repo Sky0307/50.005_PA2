@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.*;
 import java.util.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -50,7 +49,7 @@ public class ServerWithSecurityCP2 {
 		FileOutputStream fileOutputStream = null;
 		BufferedOutputStream bufferedFileOutputStream = null;
 
-		SecretKey AESKey= null;
+		SecretKey AESKey = null;
 
 		try {
 			welcomeSocket = new ServerSocket(port);
@@ -132,7 +131,7 @@ public class ServerWithSecurityCP2 {
 							fromClient.readFully(block, 0, numBytes);
 							System.out.println("Client says: " + new String(block));
 							// Send the filename
-							String filename = "example-bd710400-8079-11ea-ae9d-89114163ae84.crt";
+							String filename = "certificate_1004365.crt";
 							toClient.writeInt(0);
 							toClient.writeInt(filename.getBytes().length);
 							toClient.write(filename.getBytes());
@@ -180,11 +179,10 @@ public class ServerWithSecurityCP2 {
 					AESKey = new SecretKeySpec(decodedBlock,0,decodedBlock.length, "AES");					
 					// rebuild key using SecretKeySpec
 				}
-				else if(packetType == 1234){
+				else if(packetType == 1111){
 					count = fromClient.readInt();
 					System.out.println("There are " + count + " number of files to receive.");
 				}
-
 			}
 		} catch (Exception e) {e.printStackTrace();}
 

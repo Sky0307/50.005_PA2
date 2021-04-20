@@ -23,22 +23,22 @@ public class ClientWithSecurityCP2{
 		
 		String msg_verify = null;
 		String msg_verified = null;
+		//message to be sent to server
 		String msg_init = null;
 		byte [] msg_verify_bytes =null;
 		FileOutputStream fileOutputStream = null;
 		BufferedOutputStream bufferedFileOutputStream = null;
 		int numBytes = 0;
 
-		// initialising the handshake	
+		// initialising the handshake
 
 		//Generating NONCE	
-		String dateTimeString = Long.toString(new Date().getTime());
-        byte[] nonceByte = dateTimeString.getBytes();
+		String timeString = Long.toString(new Date().getTime());
+        byte[] nonceByte = timeString.getBytes();
 		String nonce =  new String(nonceByte);
 		toServer.writeInt(2);
 		toServer.writeInt(nonce.getBytes().length);
 		toServer.write(nonce.getBytes());
-		
 	
 		// waiting for SecStore response
 		while(msg_verify == null){
@@ -56,6 +56,7 @@ public class ClientWithSecurityCP2{
 		// ask for CA cert to get server's public key
 		msg_init = "Give me your certificate signed by CA";
 		System.out.println("Sending msg_init :" + msg_init);
+		// 2 => establishing connection
 		toServer.writeInt(2);
 		toServer.writeInt(msg_init.getBytes().length);
 		toServer.write(msg_init.getBytes());
@@ -70,16 +71,15 @@ public class ClientWithSecurityCP2{
 				fromServer.readFully(filename, 0, numBytes);
 				fileOutputStream = new FileOutputStream("recv_"+new String(filename, 0, numBytes));
 				bufferedFileOutputStream = new BufferedOutputStream(fileOutputStream);
-
 			}else if (packetType == 1) {
 				numBytes = fromServer.readInt();
 				byte [] block = new byte[numBytes];
+				// LOOKHERE : Get server.crt from server
 				fromServer.readFully(block, 0, numBytes);
 					if (numBytes > 0){
 						bufferedFileOutputStream.write(block, 0, numBytes);
 					}
 					if (numBytes < 117) {
-
 						if (bufferedFileOutputStream != null) bufferedFileOutputStream.close();
 						if (bufferedFileOutputStream != null) fileOutputStream.close();
 						condition = false;
@@ -90,7 +90,7 @@ public class ClientWithSecurityCP2{
 
 		// get public key from certificate
 		//does the name need to be dynamic?
-		InputStream fileInputStream = new FileInputStream("recv_example-bd710400-8079-11ea-ae9d-89114163ae84.crt");
+		InputStream fileInputStream = new FileInputStream("certificate_1004365.crt");
 		CertificateFactory certf = CertificateFactory.getInstance("X.509");
 		X509Certificate serverCert =(X509Certificate)(certf.generateCertificate(fileInputStream));
 
@@ -109,10 +109,9 @@ public class ClientWithSecurityCP2{
 		if(nonce.compareTo(msg_verified) == 0){
 			System.out.println("decrypted message is the exact same as the nonce. Check succeeded.");
 		}else{System.out.println("decrypted message is not the same as the nonce. Check failed.");}
-
 	}
 	public static void main(String[] args) {
-		int counter = args.length;
+		int count = args.length;
 		String serverAddress = "localhost";
 		String filename = null;
     	int port = 4321;
@@ -127,7 +126,6 @@ public class ClientWithSecurityCP2{
 		long timeStarted = System.nanoTime();
 
 		try {
-
 			System.out.println("Establishing connection to server...");
 			
 			//Create X509Certificate object
@@ -135,7 +133,7 @@ public class ClientWithSecurityCP2{
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			X509Certificate CAcert =(X509Certificate)cf.generateCertificate(fis);
 
-			// //Extract public key from X509Certificate object
+			// Extract public key from X509Certificate object
 			// PublicKey key = CAcert.getPublicKey();
 
 			//Verify signed certificate
@@ -168,15 +166,16 @@ public class ClientWithSecurityCP2{
 			// Connect to server
 
 			// send number of files
-			toServer.writeInt(1234);
-			toServer.writeInt(counter);
+			toServer.writeInt(1111);
+			toServer.writeInt(count);
 
 			// Encrypt file with symmetric key
 			Cipher AESCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 			
 			System.out.println("sending files...");
 			AESCipher.init(Cipher.ENCRYPT_MODE, AESkey);
-			for (int i = 0; i < counter; i++) {
+			
+			for (int i = 0; i < count; i++) {
 				filename = args[i];
 				encryptedBlock = AESCipher.doFinal(filename.getBytes());
 				//send encryptedBlock to SecServer

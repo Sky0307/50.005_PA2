@@ -1,3 +1,5 @@
+package CP1.Server;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
