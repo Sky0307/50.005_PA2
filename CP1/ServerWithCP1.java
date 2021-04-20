@@ -15,11 +15,11 @@ public class ServerWithCP1 {
 	public static void main(String[] args) throws Exception {
 
 		// get server cert
-		X509Certificate serverCert = CertificateReader.get("CP1/key_cert/cacse.crt");
+		X509Certificate serverCert = CertificateReader.get("CP1\\key_cert\\cacse.crt");
 
 		// read S private key
 		PrivateKey serverPrivateKey;
-		serverPrivateKey = PrivateKeyReader.get("CP1/key_cert/private_key.der");
+		serverPrivateKey = PrivateKeyReader.get("CP1\\key_cert\\private_key.der");
 		System.out.println("ServerPrivateKey : " + serverPrivateKey);
 		System.out.println();
 
